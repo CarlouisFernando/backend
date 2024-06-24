@@ -62,7 +62,7 @@ class JadwalController extends Controller
             'jam_awal' => 'required',
             'jam_akhir' => 'required',
             'tanggal' => 'required|date',
-            'id_kelas' => 'required|integer|exists:kelas,id',
+            'id_kelas' => 'required|integer|exists:kelas,id',//id kelas harus ada di tabel kelas
         ]);
         if ($validator->fails()) {
             $messages = $validator->errors()->all();
@@ -70,8 +70,8 @@ class JadwalController extends Controller
             return back()->withErrors($validator)->withInput();
         }
         $data = Jadwal::find($request->id);
-        $data->jam_awal = $this->convertTo24HourFormat($request->jam_awal);
-        $data->jam_akhir = $this->convertTo24HourFormat($request->jam_akhir);
+        $data->jam_awal = $this->convertTo24HourFormat($request->jam_awal);//memanggil fungsi convertTo24HourFormat dengan parameternya
+        $data->jam_akhir = $this->convertTo24HourFormat($request->jam_akhir);//memanggil fungsi convertTo24HourFormat dengan parameternya
         $data->tanggal = Carbon::parse($request->tanggal)->format('Y-m-d');
         $data->id_kelas = $request->id_kelas;
         $data->save();

@@ -60,38 +60,39 @@ class AuthController extends Controller
     }
 
     public function registeract(Request $request) {
-
+//validasi dari request
         $validator= Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
-            'alamat'=>'required|string|max:255',
-            'no_hp'=>'required|numeric',
+            'email' => 'required|string|email|max:255|unique:users',//validasi email dan uniique untuk di tabel user dengan field email
+            'password' => 'required|string|min:8',//validasi password dan min 8
+            'alamat'=>'required|string|max:255',//validasi alamat
+            'no_hp'=>'required|numeric',//validasi no hp supaya angka ajaa
         ]);
         if ($validator->fails()) {
             $messages = $validator->errors()->all();
             Alert::error($messages)->flash();
             return back()->withErrors($validator)->withInput();
         }
+        //DB::beginTransaction(); merupakan fungsi untuk memulai transaksi di database
         DB::beginTransaction();
         try {
             //code...
          
-            $user = new User();
+            $user = new User();//membuat objek user
             $user->name = $request->name;
             $user->email = $request->email;
             $user->password = bcrypt($request->password);
             $user->role="pelanggan";
-            $user->save();
+            $user->save();//fungsi save untuk menyimpan data ke database di tabel user
             $pelanggan=new Pelanggan();
             $pelanggan->id_user=$user->id;
             $pelanggan->name=$request->name;
             $pelanggan->alamat=$request->alamat;
             $pelanggan->no_hp=$request->no_hp;
-            $pelanggan->save();
+            $pelanggan->save();//fungsi save untuk menyimpan data ke database di tabel pelanggan
 
             Alert::success('Success', 'Berhasil Registrasi')->flash();
-            DB::commit();
+            DB::commit();//fungsi commit untuk menyelesaikan transaksi di database ATAU DI masukkan
             return redirect()->route('login');
 
 
@@ -110,6 +111,7 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
+        //fungsi logout
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

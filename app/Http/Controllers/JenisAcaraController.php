@@ -11,7 +11,7 @@ class JenisAcaraController extends Controller
 {
     public function index( Request $request) {
         $title="Jenis Acara";
-        $data=JenisAcara::where('jenis_acara', 'like', '%' . $request->search . '%')->paginate(10);
+        $data=JenisAcara::where('jenis_acara', 'like', '%' . $request->search . '%')->paginate(10);//mengambil 10 data
         $offset = ($data->currentPage() - 1) * $data->perPage();
         return view('jenis_acara.index',compact('title', 'data', 'offset'));
     }
@@ -27,7 +27,7 @@ if ($validator->fails()) {
 $data = new JenisAcara();
 $data->jenis_acara = $request->jenis_acara;
 $data->save();
-Alert::success('Success', 'Data Berhasil di tambah')->flash();
+Alert::success('Success', 'Data Berhasil di tambah')->flash();//menampilkan pesan sukses
 return redirect()->route('jenis_acara');
     }
     public function hapus_jenis_acara($id){

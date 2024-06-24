@@ -22,7 +22,7 @@ class DashboardController extends Controller
             case 'pelanggan':
                 $userId = Auth::id();
                 $pelanggan=Pelanggan::where('id_user', $userId)->first();
-                $jumlah_pesanan = Keranjang::where('id_pelanggan', $pelanggan->id)->count();
+                $jumlah_pesanan = Keranjang::where('id_pelanggan', $pelanggan->id)->count();// menghitung keranjang berdsarkan id pelanggan
                 return view('dashboard.dashboard_pelanggan',compact('title','jumlah_pesanan'));
                 break;
                     # code...
